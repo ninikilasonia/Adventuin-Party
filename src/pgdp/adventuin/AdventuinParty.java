@@ -31,4 +31,16 @@ public final class AdventuinParty {
         adventuin.stream().sorted(Comparator.comparing(Adventuin::getHeight)).
                 forEach(a -> System.out.println(getLocalizedChristmasGreeting(a)));
     }
+    public static Map<HatType, List<Adventuin>> getAdventuinsWithLongestNamesByHatType (List<Adventuin> adventuins){
+        List<Integer> names = new ArrayList<>();
+        adventuins.stream().forEach(a -> {
+            names.add(a.getName().length());
+        });
+
+        int maxLet = names.stream().max(Comparator.comparingInt(x -> x)).orElse(0);
+
+        List<Adventuin> maxNames = adventuins.stream().filter(a -> a.getName().length() == maxLet).toList();
+
+        return groupByHatType(maxNames);
+    }
 }
