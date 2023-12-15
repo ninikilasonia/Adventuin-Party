@@ -1,9 +1,6 @@
 package pgdp.adventuin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class AdventuinParty {
 
@@ -23,5 +20,15 @@ public final class AdventuinParty {
             });
         });
         return res;
+    }
+
+
+    public static String getLocalizedChristmasGreeting(Adventuin name) {
+        return name.getLanguage().getLocalizedChristmasGreeting(name.getName());
+    }
+
+    public static void printLocalizedChristmasGreetings(List<Adventuin> adventuin) {
+        adventuin.stream().sorted(Comparator.comparing(Adventuin::getHeight)).
+                forEach(a -> System.out.println(getLocalizedChristmasGreeting(a)));
     }
 }
