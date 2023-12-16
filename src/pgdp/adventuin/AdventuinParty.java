@@ -79,4 +79,33 @@ public final class AdventuinParty {
     private static double brightness(RgbColor8Bit color) {
         return (0.2126 * color.getRed() + 0.7152 * color.getGreen() + 0.0722 * color.getBlue());
     }
+
+    public static Map<HatType, Double> getDiffOfAvgHeightDiffsToPredecessorByHatType(List<Adventuin> adventuins) {
+        Map<HatType, Double> res = new HashMap<>();
+        Map<HatType, List<Adventuin>> hat = groupByHatType(adventuins);
+
+        hat.forEach((hatType, adv) -> {
+            double posSum = 0.0;
+            double negSum = 0.0;
+            int posCount = 0;
+            int negCount = 0;
+
+            for (int i = 0; i < adv.size(); i++) {
+                int diff = adv.get(i).getHeight() - adv.get(i-1+adv.size()).getHeight();
+
+                if(diff > 0) {
+                    posSum += diff;
+                    posCount++;
+                }
+                else if(diff < 0) {
+                    negSum += diff;
+                    negCount++;
+                }
+            }
+
+            double absDiff = posSum / posCount - negSum / negCount;
+            res.put(hatType, absDiff);
+        });
+        return res;
+    }
 }
