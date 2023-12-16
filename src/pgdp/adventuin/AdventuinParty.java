@@ -1,5 +1,8 @@
 package pgdp.adventuin;
 
+import pgdp.color.RgbColor;
+import pgdp.color.RgbColor8Bit;
+
 import java.util.*;
 
 public final class AdventuinParty {
@@ -42,5 +45,38 @@ public final class AdventuinParty {
         List<Adventuin> maxNames = adventuins.stream().filter(a -> a.getName().length() == maxLet).toList();
 
         return groupByHatType(maxNames);
+    }
+
+    public static Map<Integer, Double> getAverageColorBrightnessByHeight(List<Adventuin> adventuins) {
+        Map<Integer, Double> res = new HashMap<>();
+        List<Integer> heights = new ArrayList<>();
+
+        adventuins.forEach(a -> {
+            int roundHeight = rHeight(a);
+            heights.add(roundHeight);
+        });
+
+        heights.stream().distinct().forEach(x -> {
+            List<Double> bright = new ArrayList<>();
+
+            adventuins.forEach(adventuin -> {
+                if(rHeight(adventuin) == x){
+                    bright.add(brightness(adventuin.getColor().toRgbColor8Bit()));
+                }
+            });
+
+            double avg = bright.stream().mapToDouble(Double :: doubleValue).average().getAsDouble();
+
+            res.put(x, avg);
+        });
+        return res;
+    }
+
+    private static int rHeight (Adventuin adventuin) {
+        return (int) ((Math.round((double) adventuin.getHeight() / 10)) * 10);
+    }
+
+    private static double brightness(RgbColor8Bit color) {
+        return (0.2126 * color.getRed() + 0.7152 * color.getGreen() + 0.0722 * color.getBlue());
     }
 }
